@@ -93,27 +93,47 @@
         } else {
             socket = new WebSocket("ws://{{.Host}}/room");
             socket.onclose = function() {
-            alert("Connection closed.");
+            // alert("Connection closed.");
             }
             socket.onmessage = function(e) {
                 var msg = JSON.parse(e.data)
-                messages.append(
-                    $("<div>").attr("class", "chat-box-msg right")
-                    .append(
-                        $("<div>").attr("class", "chat-box-info clearfix")
+                if (msg.Name == "{{.UserData.name}}") {
+                    messages.append(
+                        $("<div>").attr("class", "chat-box-msg right")
                         .append(
-                            $("<span>").attr("class", "chat-box-name pull-right").text("name"))
-                        .append(
-                            $("<span>").attr("class", "chat-box-timestamp pull-left").text((new Date(msg.When)))
+                            $("<div>").attr("class", "chat-box-info clearfix")
+                            .append(
+                                $("<span>").attr("class", "chat-box-name pull-right").text("{{.UserData.name}}"))
+                            .append(
+                                $("<span>").attr("class", "chat-box-timestamp pull-left").text((new Date(msg.When)))
+                            )
                         )
-                    )
-                    .append(
-                        $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
-                    )
-                    .append(
-                        $("<div>").attr("class", "chat-box-text").text(msg.Message)
-                    )
-                );
+                        .append(
+                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                        )
+                        .append(
+                            $("<div>").attr("class", "chat-box-text").text(msg.Message)
+                        )
+                    );
+                } else {
+                    messages.append(
+                        $("<div>").attr("class", "chat-box-msg left")
+                        .append(
+                            $("<div>").attr("class", "chat-box-info clearfix")
+                            .append(
+                                $("<span>").attr("class", "chat-box-name pull-left").text("{{.UserData.name}}"))
+                            .append(
+                                $("<span>").attr("class", "chat-box-timestamp pull-right").text((new Date(msg.When)))
+                            )
+                        )
+                        .append(
+                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                        )
+                        .append(
+                            $("<div>").attr("class", "chat-box-text").text(msg.Message)
+                        )
+                    );
+                }
             }
         }
     });
@@ -144,7 +164,7 @@
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <img src="http://i.pravatar.cc/300?img=59" class="user-image" alt="User Image">
-                                        <span class="hidden-xs">Zachary Banks</span>
+                                        <span class="hidden-xs">{{.UserData.name}}</span>
                                     </a>
                                 </li>
                                 </ul>
