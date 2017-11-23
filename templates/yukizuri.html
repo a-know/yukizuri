@@ -98,12 +98,12 @@
             socket.onmessage = function(e) {
                 var msg = JSON.parse(e.data)
                 if (msg.Name == "{{.UserData.name}}") {
-                    messages.append(
+                    messages.prepend(
                         $("<div>").attr("class", "chat-box-msg right")
                         .append(
                             $("<div>").attr("class", "chat-box-info clearfix")
                             .append(
-                                $("<span>").attr("class", "chat-box-name pull-right").text("{{.UserData.name}}"))
+                                $("<span>").attr("class", "chat-box-name pull-right").text(msg.Name))
                             .append(
                                 $("<span>").attr("class", "chat-box-timestamp pull-left").text((new Date(msg.When)))
                             )
@@ -116,12 +116,12 @@
                         )
                     );
                 } else {
-                    messages.append(
+                    messages.prepend(
                         $("<div>").attr("class", "chat-box-msg left")
                         .append(
                             $("<div>").attr("class", "chat-box-info clearfix")
                             .append(
-                                $("<span>").attr("class", "chat-box-name pull-left").text("{{.UserData.name}}"))
+                                $("<span>").attr("class", "chat-box-name pull-left").text(msg.Name))
                             .append(
                                 $("<span>").attr("class", "chat-box-timestamp pull-right").text((new Date(msg.When)))
                             )
