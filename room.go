@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/a-know/yukizuri/trace"
 	"github.com/gorilla/websocket"
@@ -49,28 +50,47 @@ func (r *room) run() {
 			// join this room
 			r.clients[client] = true
 			r.number++
-			r.tracer.Trace(fmt.Sprintf("Joined a new client. Joined members count: %d", r.number))
+			message := fmt.Sprintf("Joined a new client. Joined members count: %d", r.number)
+			r.tracer.Trace(message)
+			// send system message
+			msg := makeSystemMessage(message)
+			sendMessageAllClients(r, msg)
 		case client := <-r.leave:
 			// leave from room
 			delete(r.clients, client)
 			close(client.send)
 			r.number--
-			r.tracer.Trace(fmt.Sprintf("Leave a client. Joined members count: %d", r.number))
+			message := fmt.Sprintf("Leave a client. Joined members count: %d", r.number)
+			r.tracer.Trace(message)
+			msg := makeSystemMessage(message)
+			sendMessageAllClients(r, msg)
 		case msg := <-r.forward:
 			r.tracer.Trace("Receive a message: ", msg.Message)
-			// send message to all clients
-			for client := range r.clients {
-				select {
-				case client.send <- msg:
-					// send a message
-					r.tracer.Trace(" -- Send a message: ", msg.Message)
-				default:
-					// fail to sending message
-					delete(r.clients, client)
-					close(client.send)
-					r.tracer.Trace(" -- Failed to send a message. Cleanup client...")
-				}
-			}
+			sendMessageAllClients(r, msg)
+		}
+	}
+}
+
+func makeSystemMessage(content string) *message {
+	msg := &message{
+		When:    time.Now(),
+		Name:    "Yukizuri-sys",
+		Message: content,
+	}
+	return msg
+}
+
+func sendMessageAllClients(r *room, msg *message) {
+	for client := range r.clients {
+		select {
+		case client.send <- msg:
+			// send a message
+			r.tracer.Trace(" -- Send a message: ", msg.Message)
+		default:
+			// fail to sending message
+			delete(r.clients, client)
+			close(client.send)
+			r.tracer.Trace(" -- Failed to send a message. Cleanup client...")
 		}
 	}
 }
