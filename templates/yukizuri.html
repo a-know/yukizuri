@@ -109,7 +109,7 @@
                             )
                         )
                         .append(
-                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                            $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
                         )
                         .append(
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
@@ -127,7 +127,7 @@
                             )
                         )
                         .append(
-                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                            $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
                         )
                         .append(
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
@@ -137,10 +137,25 @@
             }
         }
     });
+
+    function get_identicon(text) {
+        var salt = 0;
+        var rounds = 1;
+        var size = 210;
+        var outputType = "HEX";
+        var hashtype = "SHA-512";
+        var shaObj = new jsSHA(text+salt, "TEXT");
+        var hash = shaObj.getHash(hashtype, outputType,rounds);
+        var data = new Identicon(hash, size).toString();
+        return 'data:image/png;base64,' + data;
+    }
     </script>
     <script src="./plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="./plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="./plugins/aos/aos.js"></script>
+    <script src="./plugins/pnglib/pnglib.js"></script>
+    <script src="./plugins/identicons/identicons.js"></script>
+    <script src="./plugins/sha/sha.js"></script>
     <script src="./plugins/pjax/jquery.pjax.min.js"></script>
     <script src="./js/main.js"></script>
     <!-- endbuild -->
@@ -163,7 +178,7 @@
                                 <ul class="nav navbar-nav">
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <img src="http://i.pravatar.cc/300?img=59" class="user-image" alt="User Image">
+                                        <img src="http://i.pravatar.cc/128?img=24" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
                                         <span class="hidden-xs">{{.UserData.name}}</span>
                                     </a>
                                 </li>
@@ -217,27 +232,27 @@
                                         <div class="box-body">
                                             <ul class="users-list clearfix">
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=24" alt="User Image">
+                                                    <img src="http://i.pravatar.cc/128?img=24" onload="this.onload=null; this.src=get_identicon('24');" alt="User Image">
                                                     <a class="users-list-name" href="#">Susan</a>
                                                     <span class="users-list-date">Today</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=35" alt="User Image">
+                                                    <img src="http://i.pravatar.cc/128?img=35" onload="this.onload=null; this.src=get_identicon('35');" alt="User Image">
                                                     <a class="users-list-name" href="#">Norman</a>
                                                     <span class="users-list-date">Yesterday</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=14" alt="User Image">
+                                                    <img src="http://i.pravatar.cc/128?img=14" onload="this.onload=null; this.src=get_identicon('14');" alt="User Image">
                                                     <a class="users-list-name" href="#">Jane</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=18" alt="User Image">
+                                                    <img src="http://i.pravatar.cc/128?img=18" onload="this.onload=null; this.src=get_identicon('18');" alt="User Image">
                                                     <a class="users-list-name" href="#">John</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=37" alt="User Image">
+                                                    <img src="http://i.pravatar.cc/128?img=37" onload="this.onload=null; this.src=get_identicon('37');" alt="User Image">
                                                     <a class="users-list-name" href="#">Alexander</a>
                                                     <span class="users-list-date">13 Jan</span>
                                                 </li>
