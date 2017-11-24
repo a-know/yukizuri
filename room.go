@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/a-know/goblueprints/chapter1/trace"
+	"github.com/a-know/yukizuri/trace"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/objx"
 )
@@ -23,6 +24,8 @@ type room struct {
 	tracer trace.Tracer
 	// get avatar info
 	avatar Avatar
+	// joined members number
+	number int
 }
 
 func newRoom(logging bool) *room {
@@ -45,12 +48,14 @@ func (r *room) run() {
 		case client := <-r.join:
 			// join this room
 			r.clients[client] = true
-			r.tracer.Trace("Joined a new client.")
+			r.number++
+			r.tracer.Trace(fmt.Sprintf("Joined a new client. Joined members count: %d", r.number))
 		case client := <-r.leave:
 			// leave from room
 			delete(r.clients, client)
 			close(client.send)
-			r.tracer.Trace("Leave a client.")
+			r.number--
+			r.tracer.Trace(fmt.Sprintf("Leave a client. Joined members count: %d", r.number))
 		case msg := <-r.forward:
 			r.tracer.Trace("Receive a message: ", msg.Message)
 			// send message to all clients
