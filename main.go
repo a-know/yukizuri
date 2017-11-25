@@ -39,7 +39,7 @@ func main() {
 	http.Handle("/chat", MustJoin(&templateHandler{filename: "yukizuri.html"}))
 	http.Handle("/join", &templateHandler{filename: "join.html"})
 	http.Handle("/", &templateHandler{filename: "join.html"})
-	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/leave", func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
 			Name:   "yukizuri",
 			Value:  "",
