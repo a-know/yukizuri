@@ -116,6 +116,12 @@
                         )
                     );
                 } else {
+                    var icon = ""
+                    if (msg.Name == "Yukizuri-sys") {
+                        icon = "./images/yukizuri-sys.png"
+                    } else {
+                        icon = get_identicon(msg.Name)
+                    }
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg left")
                         .append(
@@ -127,7 +133,7 @@
                             )
                         )
                         .append(
-                            $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
+                            $("<img>").attr("class", "chat-box-img").attr("src", icon)
                         )
                         .append(
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
@@ -178,7 +184,7 @@
                                 <ul class="nav navbar-nav">
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <img src="http://i.pravatar.cc/128?img=24" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
+                                        <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
                                         <span class="hidden-xs">{{.UserData.name}}</span>
                                     </a>
                                 </li>
@@ -232,27 +238,27 @@
                                         <div class="box-body">
                                             <ul class="users-list clearfix">
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=24" onload="this.onload=null; this.src=get_identicon('24');" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('24');" alt="User Image">
                                                     <a class="users-list-name" href="#">Susan</a>
                                                     <span class="users-list-date">Today</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=35" onload="this.onload=null; this.src=get_identicon('35');" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('35');" alt="User Image">
                                                     <a class="users-list-name" href="#">Norman</a>
                                                     <span class="users-list-date">Yesterday</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=14" onload="this.onload=null; this.src=get_identicon('14');" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('14');" alt="User Image">
                                                     <a class="users-list-name" href="#">Jane</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=18" onload="this.onload=null; this.src=get_identicon('18');" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('18');" alt="User Image">
                                                     <a class="users-list-name" href="#">John</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=37" onload="this.onload=null; this.src=get_identicon('37');" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('37');" alt="User Image">
                                                     <a class="users-list-name" href="#">Alexander</a>
                                                     <span class="users-list-date">13 Jan</span>
                                                 </li>
