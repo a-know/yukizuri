@@ -140,6 +140,7 @@
                         )
                     );
                     // refresh members list
+                    $("#members-count").text(msg.CurrentMembers.length);
                     $("#members-box").empty();
                     for(let i = 0; i < msg.CurrentMembers.length; i++) {
                         $("#members-box")
@@ -242,7 +243,8 @@
                                     <div class="box box-primary box-solid" data-aos="fade-up">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">
-                                            Joined Members
+                                                Joined Members
+                                                <span class="badge bg-white members-count" id="members-count">1</span>
                                             </h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
