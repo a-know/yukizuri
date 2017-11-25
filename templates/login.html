@@ -80,21 +80,17 @@
         </div>
         <div class="login-box-body">
             <p class="login-box-msg">Just decide nickname to join <span id="service-name">Yukizuri</span>!</p>
-                <div class="form-group has-feedback">
-                    <input type="text" class="form-control" placeholder="Nickname">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-                <div class="row">
-                    <div class="col-xs-8">
-                    </div><!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="input" class="btn btn-primary btn-block">Join!</button>
-                    </div><!-- /.col -->
-                </div>
-            <ul>
-                <li><a href="/auth/login/google">Google</a></li>
-                <li><a href="/auth/join/a-know">Just Join</a></li>
-            </ul>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Nickname" id="nickname">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="input" class="btn btn-primary btn-block" onClick="join();">Join!</button>
+                </div><!-- /.col -->
+            </div>
         </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
 
