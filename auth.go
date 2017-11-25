@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/stretchr/gomniauth"
 	gomniauthcommon "github.com/stretchr/gomniauth/common"
@@ -56,6 +57,22 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		action := segs[2]
 		provider := segs[3]
 		switch action {
+		case "join":
+			m := md5.New()
+			io.WriteString(m, strings.ToLower(time.Now().String()))
+			uniqueID := fmt.Sprintf("%x", m.Sum(nil))
+			authCookieValue := objx.New(map[string]interface{}{
+				"userid":     uniqueID,
+				"name":       provider,
+				"avatar_url": "",
+				"email":      "",
+			}).MustBase64()
+			http.SetCookie(w, &http.Cookie{
+				Name:  "auth",
+				Value: authCookieValue,
+				Path:  "/"})
+			w.Header()["Location"] = []string{"/chat"}
+			w.WriteHeader(http.StatusTemporaryRedirect)
 		case "login":
 			provider, err := gomniauth.Provider(provider)
 			if err != nil {

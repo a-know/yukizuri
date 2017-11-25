@@ -16,6 +16,9 @@ body {
   width: 100%;
   height: 100%;
 }
+#service-name {
+  color: #af1342;
+}
 article,
 aside,
 details,
@@ -11240,7 +11243,7 @@ fieldset[disabled] .btn-yahoo.focus {
   font-size: 35px;
   text-align: center;
   font-weight: 300;
-  background: #af1342;
+  background: #eeeeee;
   padding-bottom: 12px;
 }
 .login-logo a,
@@ -11253,7 +11256,7 @@ fieldset[disabled] .btn-yahoo.focus {
 }
 .login-page,
 .register-page {
-  background: #eeeeee;
+  background: #e17978;
 }
 .login-box,
 .register-box {
