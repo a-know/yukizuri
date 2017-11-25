@@ -199,8 +199,8 @@
                                 <ul class="nav navbar-nav">
                                 <li class="dropdown user user-menu">
                                     <a href="/logout" class="dropdown-toggle">
-                                        <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
-                                        <span class="hidden-xs">{{.UserData.name}}</span>
+                                        <img src="./images/leave.png" class="user-image">
+                                        <span class="hidden-xs">Leave</span>
                                     </a>
                                 </li>
                                 </ul>
@@ -218,7 +218,7 @@
                                     <!-- DIRECT CHAT -->
                                     <div class="box box-primary box-solid box-default chat-box chat-box-danger" data-aos="fade-up">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Messages</h3>
+                                            <h3 class="box-title">{{.UserData.name}}</h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <!-- Conversations are loaded here -->
