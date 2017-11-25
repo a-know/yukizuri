@@ -29,9 +29,7 @@
     <link rel="icon" type="image/png" href="./images/icons/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/png" href="./images/icons/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="./images/icons/manifest.json">
-    <link rel="mask-icon" href="./images/icons/safari-pinned-tab.svg">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="./mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
     <!-- SEARCH -->
@@ -143,6 +141,12 @@
                     $("#members-count").text(msg.CurrentMembers.length);
                     $("#members-box").empty();
                     for(let i = 0; i < msg.CurrentMembers.length; i++) {
+                        var memberName = "";
+                        if ("{{.UserData.name}}" == msg.CurrentMembers[i]) {
+                            memberName = msg.CurrentMembers[i] + " (You)";
+                        } else {
+                            memberName = msg.CurrentMembers[i];
+                        }
                         $("#members-box")
                         .append(
                             $("<li>")
@@ -150,7 +154,7 @@
                                 $("<img>").attr("src", get_identicon(msg.CurrentMembers[i]))
                             )
                             .append(
-                                $("<span>").attr("class", "users-list-date").text(msg.CurrentMembers[i])
+                                $("<span>").attr("class", "users-list-date").text(memberName)
                             )
                         );
                     }
@@ -198,9 +202,9 @@
                             <div class="navbar-custom-menu">
                                 <ul class="nav navbar-nav">
                                 <li class="dropdown user user-menu">
-                                    <a href="/logout" class="dropdown-toggle">
-                                        <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
-                                        <span class="hidden-xs">{{.UserData.name}}</span>
+                                    <a href="/leave" class="dropdown-toggle">
+                                        <img src="./images/leave.png" class="user-image">
+                                        <span class="hidden-xs">Leave</span>
                                     </a>
                                 </li>
                                 </ul>
@@ -218,7 +222,7 @@
                                     <!-- DIRECT CHAT -->
                                     <div class="box box-primary box-solid box-default chat-box chat-box-danger" data-aos="fade-up">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Messages</h3>
+                                            <h3 class="box-title">{{.UserData.name}}</h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <!-- Conversations are loaded here -->
@@ -257,7 +261,7 @@
                     </div><!-- /.row -->
                     <footer class="main-footer">
                         <div class="pull-right hidden-xs">
-                            This bootstrap theme is <a href="http://authenticpixels.com"><strong>Authentic Pixels</strong></a>
+                            This bootstrap theme is <a href="https://wrapbootstrap.com/user/bharani"><strong>Authentic Pixels</strong></a>
                         </div>
                         <strong>Copyright &copy; 2017 a-know. All rights reserved.
                     </footer>
