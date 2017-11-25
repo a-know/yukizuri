@@ -19,6 +19,12 @@ body {
 #service-name {
   color: #af1342;
 }
+.members-count {
+  position: relative;
+  top: -2px;
+  background-color: #e0e0e0 !important;
+  color: #000000 !important;
+}
 article,
 aside,
 details,

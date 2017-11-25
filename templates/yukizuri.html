@@ -139,6 +139,21 @@
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
                         )
                     );
+                    // refresh members list
+                    $("#members-count").text(msg.CurrentMembers.length);
+                    $("#members-box").empty();
+                    for(let i = 0; i < msg.CurrentMembers.length; i++) {
+                        $("#members-box")
+                        .append(
+                            $("<li>")
+                            .append(
+                                $("<img>").attr("src", get_identicon(msg.CurrentMembers[i]))
+                            )
+                            .append(
+                                $("<span>").attr("class", "users-list-date").text(msg.CurrentMembers[i])
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -228,37 +243,12 @@
                                     <div class="box box-primary box-solid" data-aos="fade-up">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">
-                                            Joined Members
+                                                Joined Members
+                                                <span class="badge bg-white members-count" id="members-count">1</span>
                                             </h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
-                                            <ul class="users-list clearfix">
-                                                <li>
-                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('24');" alt="User Image">
-                                                    <a class="users-list-name" href="#">Susan</a>
-                                                    <span class="users-list-date">Today</span>
-                                                </li>
-                                                <li>
-                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('35');" alt="User Image">
-                                                    <a class="users-list-name" href="#">Norman</a>
-                                                    <span class="users-list-date">Yesterday</span>
-                                                </li>
-                                                <li>
-                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('14');" alt="User Image">
-                                                    <a class="users-list-name" href="#">Jane</a>
-                                                    <span class="users-list-date">12 Jan</span>
-                                                </li>
-                                                <li>
-                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('18');" alt="User Image">
-                                                    <a class="users-list-name" href="#">John</a>
-                                                    <span class="users-list-date">12 Jan</span>
-                                                </li>
-                                                <li>
-                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('37');" alt="User Image">
-                                                    <a class="users-list-name" href="#">Alexander</a>
-                                                    <span class="users-list-date">13 Jan</span>
-                                                </li>
-                                            </ul><!-- /.users-list -->
+                                            <ul class="users-list clearfix" id="members-box"></ul>
                                         </div><!-- /.box-body -->
                                     </div><!--/.box -->
                                 </div><!-- /.col -->
