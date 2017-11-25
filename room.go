@@ -23,8 +23,6 @@ type room struct {
 	clients map[*client]bool
 	// logging
 	tracer trace.Tracer
-	// get avatar info
-	avatar Avatar
 	// joined members number
 	number int
 }
