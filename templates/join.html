@@ -1,0 +1,105 @@
+<!doctype html>
+<!--[if lt IE 7 ]><html itemscope itemtype="https://schema.org/" id="ie6" class="ie" lang="en-US"><![endif]-->
+<!--[if IE 7 ]>   <html itemscope itemtype="https://schema.org/" id="ie7" class="ie" lang="en-US"><![endif]-->
+<!--[if IE 8 ]>   <html itemscope itemtype="https://schema.org/" id="ie8" class="ie" lang="en-US"><![endif]-->
+<!--[if IE 9 ]>   <html itemscope itemtype="https://schema.org/" id="ie9" class="ie" lang="en-US"><![endif]-->
+<!--[if gt IE 9]><!-->
+<html itemscope itemtype="https://schema.org/" lang="en-US">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Yukizuri</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="./images/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./images/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./images/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./images/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./images/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./images/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./images/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./images/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="./images/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./images/icons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="./images/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="./images/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="./images/icons/manifest.json">
+    <link rel="mask-icon" href="./images/icons/safari-pinned-tab.svg">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- SEARCH -->
+    <meta name="author" content="">
+    <meta name="description" content="">
+
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="">
+    <meta name="twitter:site" content="">
+    <meta name="twitter:creator" content="">
+    <meta name="twitter:title" content="">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image:src" content="">
+
+    <!-- FACEBOOK -->
+    <meta property="og:site_name" content="">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <meta property="fb:app_id" content="">
+    <meta property="fb:admins" content="">
+
+    <!-- G+ -->
+    <meta itemprop="name" content="">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,600' rel='stylesheet' type='text/css'>
+
+    <!--build:css /css/styles.min.css-->
+    <link rel="stylesheet" href="./css/styles.css">
+    <!--endbuild-->
+</head>
+
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="./images/yukizuri-logo.png" id="logoimage">
+        </div>
+        <div class="login-box-body">
+            <p class="login-box-msg">Just decide nickname to join <span id="service-name">Yukizuri</span>!</p>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Nickname" id="nickname">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="input" class="btn btn-primary btn-block" onClick="join();">Join!</button>
+                </div><!-- /.col -->
+            </div>
+        </div><!-- /.login-box-body -->
+    </div><!-- /.login-box -->
+
+<!--build:js /js/login.min.js -->
+<script src="./plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="./plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="./js/pages/login.js"></script>
+<!-- endbuild -->
+
+</body>
+
+</html>

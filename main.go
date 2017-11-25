@@ -4,23 +4,12 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"sync"
 	"text/template"
 
-	"github.com/stretchr/gomniauth"
-	"github.com/stretchr/gomniauth/providers/facebook"
-	"github.com/stretchr/gomniauth/providers/github"
-	"github.com/stretchr/gomniauth/providers/google"
 	"github.com/stretchr/objx"
 )
-
-var avatars Avatar = TryAvatars{
-	UseFileSystemAvatar,
-	UseAuthAvatar,
-	UseGravatar,
-}
 
 type templateHandler struct {
 	once     sync.Once
@@ -36,8 +25,8 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"Host": r.Host,
 	}
-	if authCoockie, err := r.Cookie("auth"); err == nil {
-		data["UserData"] = objx.MustFromBase64(authCoockie.Value)
+	if cookie, err := r.Cookie("yukizuri"); err == nil {
+		data["UserData"] = objx.MustFromBase64(cookie.Value)
 	}
 	t.templ.Execute(w, data)
 }
@@ -46,19 +35,13 @@ func main() {
 	var addr = flag.String("addr", ":8080", "port number")
 	var logging = flag.Bool("logging", true, "logging with stdout")
 	flag.Parse()
-	// setup gomniauth
-	gomniauth.SetSecurityKey(os.Getenv("SECURITY_KEY"))
-	gomniauth.WithProviders(
-		facebook.New(os.Getenv("FACEBOOK_CLIENT_ID"), os.Getenv("FACEBOOK_SECRET_KEY"), "http://localhost:8080/auth/callback/facebook"),
-		github.New(os.Getenv("GITHUB_CLIENT_ID"), os.Getenv("GITHUB_SECRET_KEY"), "http://localhost:8080/auth/callback/github"),
-		google.New(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_SECRET_KEY"), "http://localhost:8080/auth/callback/google"),
-	)
 	r := newRoom(*logging)
-	http.Handle("/chat", MustAuth(&templateHandler{filename: "yukizuri.html"}))
-	http.Handle("/login", &templateHandler{filename: "login.html"})
+	http.Handle("/chat", MustJoin(&templateHandler{filename: "yukizuri.html"}))
+	http.Handle("/join", &templateHandler{filename: "join.html"})
+	http.Handle("/", &templateHandler{filename: "join.html"})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
-			Name:   "auth",
+			Name:   "yukizuri",
 			Value:  "",
 			Path:   "/",
 			MaxAge: -1,
@@ -66,13 +49,11 @@ func main() {
 		w.Header()["Location"] = []string{"/chat"}
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
-	http.HandleFunc("/auth/", loginHandler)
+	http.HandleFunc("/join/", joinHandler)
 	http.Handle("/room", r) // for WebSocket connection endpoint
-	http.Handle("/upload", &templateHandler{filename: "upload.html"})
-	http.HandleFunc("/uploader", uploaderHandler)
-	http.Handle("/avatars/", http.StripPrefix("/avatars/", http.FileServer(http.Dir("./avatars"))))
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./js"))))
+	http.Handle("/fonts/", http.StripPrefix("/fonts/", http.FileServer(http.Dir("./fonts"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
 	http.Handle("/plugins/", http.StripPrefix("/plugins/", http.FileServer(http.Dir("./plugins"))))
 	// Starting chatroom

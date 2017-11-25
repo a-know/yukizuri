@@ -23,8 +23,6 @@ type room struct {
 	clients map[*client]bool
 	// logging
 	tracer trace.Tracer
-	// get avatar info
-	avatar Avatar
 	// joined members number
 	number int
 }
@@ -110,7 +108,7 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	authCookie, err := req.Cookie("auth")
+	cookie, err := req.Cookie("yukizuri")
 	if err != nil {
 		log.Fatal("Failed to get cookie data:", err)
 		return
@@ -119,7 +117,7 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		socket:   socket,
 		send:     make(chan *message, messageBufferSize),
 		room:     r,
-		userData: objx.MustFromBase64(authCookie.Value),
+		userData: objx.MustFromBase64(cookie.Value),
 	}
 	r.join <- client
 	defer func() { r.leave <- client }()
