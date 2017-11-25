@@ -1089,7 +1089,7 @@ body {
   font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
-  background-color: #eeeeee;
+  background-color: #fafafa;
 }
 input,
 button,
@@ -6842,7 +6842,7 @@ body {
 .content-wrapper,
 .page-loader {
   min-height: 95vh;
-  background-color: #eeeeee;
+  background-color: #fafafa;
   z-index: 800;
 }
 .content-wrapper-transition {
@@ -9539,7 +9539,7 @@ table.text-center th {
   display: inline-block;
 }
 .main-footer {
-  background: #f5f5f5;
+  background: #eeeeee;
   padding: 15px;
   color: #444;
 }
@@ -12076,7 +12076,7 @@ fieldset[disabled] .btn-yahoo.focus {
   }
 }
 .skin-deep-blue .main-header .navbar {
-  background-color: #fff;
+  background-color: #eeeeee;
 }
 .skin-deep-blue .main-header .navbar .nav > li > a {
   color: #000;
@@ -12117,7 +12117,7 @@ fieldset[disabled] .btn-yahoo.focus {
   }
 }
 .skin-deep-blue .main-header .logo {
-  background-color: #fafafa;
+  background-color: #eeeeee;
   color: #333333;
   border-bottom: 0 solid transparent;
 }
