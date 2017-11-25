@@ -25,6 +25,8 @@ type room struct {
 	tracer trace.Tracer
 	// joined members number
 	number int
+	// joined members nickname slice
+	members []string
 }
 
 func newRoom(logging bool) *room {
@@ -47,7 +49,10 @@ func (r *room) run() {
 		case client := <-r.join:
 			// join this room
 			r.clients[client] = true
+			// keep state
 			r.number++
+			r.members = append(r.members, client.userData["name"].(string))
+
 			message := fmt.Sprintf("Joined a new client. Joined members count: %d", r.number)
 			r.tracer.Trace(message)
 			// send system message
@@ -57,7 +62,10 @@ func (r *room) run() {
 			// leave from room
 			delete(r.clients, client)
 			close(client.send)
+			// keep state
 			r.number--
+			r.members = remove(r.members, client.userData["name"].(string))
+
 			message := fmt.Sprintf("Leave a client. Joined members count: %d", r.number)
 			r.tracer.Trace(message)
 			msg := makeSystemMessage(message)
@@ -67,6 +75,16 @@ func (r *room) run() {
 			sendMessageAllClients(r, msg)
 		}
 	}
+}
+
+func remove(strings []string, search string) []string {
+	result := []string{}
+	for _, v := range strings {
+		if v != search {
+			result = append(result, v)
+		}
+	}
+	return result
 }
 
 func makeSystemMessage(content string) *message {
@@ -79,6 +97,7 @@ func makeSystemMessage(content string) *message {
 }
 
 func sendMessageAllClients(r *room, msg *message) {
+	msg.CurrentMembers = r.members
 	for client := range r.clients {
 		select {
 		case client.send <- msg:
