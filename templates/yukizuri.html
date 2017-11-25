@@ -101,7 +101,7 @@
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg right")
                         .append(
-                            $("<div>").attr("class", "chat-box-info clearfix")
+                            $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
                                 $("<span>").attr("class", "chat-box-name pull-right").text(msg.Name))
                             .append(
@@ -125,7 +125,7 @@
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg left")
                         .append(
-                            $("<div>").attr("class", "chat-box-info clearfix")
+                            $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
                                 $("<span>").attr("class", "chat-box-name pull-left").text(msg.Name))
                             .append(
@@ -201,7 +201,7 @@
                                 <div class="col-md-3"></div>
                                 <div class="col-md-6">
                                     <!-- DIRECT CHAT -->
-                                    <div class="box box-primary box-solid box-default chat-box chat-box-info" data-aos="fade-up">
+                                    <div class="box box-primary box-solid box-default chat-box chat-box-danger" data-aos="fade-up">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">Messages</h3>
                                             <div class="box-tools pull-right">
@@ -217,9 +217,9 @@
                                         <div class="box-footer box-primary box-solid">
                                             <form id="chatbox" role="form">
                                                 <div class="input-group">
-                                                    <input id="message" type="text" name="message" placeholder="Type Message ..." class="form-control focus-info">
+                                                    <input id="message" type="text" name="message" placeholder="Type Message ..." class="form-control focus-danger">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-info btn-flat">Send</button>
+                                                        <button type="submit" class="btn btn-danger btn-flat">Send</button>
                                                     </span>
                                                 </div>
                                             </form>
