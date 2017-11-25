@@ -101,7 +101,7 @@
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg right")
                         .append(
-                            $("<div>").attr("class", "chat-box-info clearfix")
+                            $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
                                 $("<span>").attr("class", "chat-box-name pull-right").text(msg.Name))
                             .append(
@@ -109,17 +109,23 @@
                             )
                         )
                         .append(
-                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                            $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
                         )
                         .append(
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
                         )
                     );
                 } else {
+                    var icon = ""
+                    if (msg.Name == "Yukizuri-sys") {
+                        icon = "./images/yukizuri-sys.png"
+                    } else {
+                        icon = get_identicon(msg.Name)
+                    }
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg left")
                         .append(
-                            $("<div>").attr("class", "chat-box-info clearfix")
+                            $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
                                 $("<span>").attr("class", "chat-box-name pull-left").text(msg.Name))
                             .append(
@@ -127,7 +133,7 @@
                             )
                         )
                         .append(
-                            $("<img>").attr("class", "chat-box-img").attr("src", msg.AvatarURL)
+                            $("<img>").attr("class", "chat-box-img").attr("src", icon)
                         )
                         .append(
                             $("<div>").attr("class", "chat-box-text").text(msg.Message)
@@ -137,10 +143,25 @@
             }
         }
     });
+
+    function get_identicon(text) {
+        var salt = 0;
+        var rounds = 1;
+        var size = 210;
+        var outputType = "HEX";
+        var hashtype = "SHA-512";
+        var shaObj = new jsSHA(text+salt, "TEXT");
+        var hash = shaObj.getHash(hashtype, outputType,rounds);
+        var data = new Identicon(hash, size).toString();
+        return 'data:image/png;base64,' + data;
+    }
     </script>
     <script src="./plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="./plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="./plugins/aos/aos.js"></script>
+    <script src="./plugins/pnglib/pnglib.js"></script>
+    <script src="./plugins/identicons/identicons.js"></script>
+    <script src="./plugins/sha/sha.js"></script>
     <script src="./plugins/pjax/jquery.pjax.min.js"></script>
     <script src="./js/main.js"></script>
     <!-- endbuild -->
@@ -156,14 +177,14 @@
                 <div class="content-wrapper dashboard-page">
                     <header class="main-header">
                         <a href="./index.html" class="logo">
-                            <span class="logo-lg">YukiZuri</span>
+                            <span class="logo-lg"><img src="./images/yukizuri-logo.png" id="logoimage"></span>
                         </a>
                         <nav class="navbar navbar-static-top">
                             <div class="navbar-custom-menu">
                                 <ul class="nav navbar-nav">
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <img src="http://i.pravatar.cc/300?img=59" class="user-image" alt="User Image">
+                                        <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('{{.UserData.name}}');" class="user-image" alt="User Image">
                                         <span class="hidden-xs">{{.UserData.name}}</span>
                                     </a>
                                 </li>
@@ -180,13 +201,9 @@
                                 <div class="col-md-3"></div>
                                 <div class="col-md-6">
                                     <!-- DIRECT CHAT -->
-                                    <div class="box box-primary box-solid box-default chat-box chat-box-info" data-aos="fade-up">
+                                    <div class="box box-primary box-solid box-default chat-box chat-box-danger" data-aos="fade-up">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">Messages</h3>
-                                            <div class="box-tools pull-right">
-                                                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                                <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                                            </div>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <!-- Conversations are loaded here -->
@@ -196,9 +213,9 @@
                                         <div class="box-footer box-primary box-solid">
                                             <form id="chatbox" role="form">
                                                 <div class="input-group">
-                                                    <input id="message" type="text" name="message" placeholder="Type Message ..." class="form-control focus-info">
+                                                    <input id="message" type="text" name="message" placeholder="Type Message ..." class="form-control focus-danger">
                                                     <span class="input-group-btn">
-                                                        <button type="submit" class="btn btn-info btn-flat">Send</button>
+                                                        <button type="submit" class="btn btn-danger btn-flat">Send</button>
                                                     </span>
                                                 </div>
                                             </form>
@@ -211,33 +228,33 @@
                                     <div class="box box-primary box-solid" data-aos="fade-up">
                                         <div class="box-header with-border">
                                             <h3 class="box-title">
-                                            Team Members
+                                            Joined Members
                                             </h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <ul class="users-list clearfix">
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=24" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('24');" alt="User Image">
                                                     <a class="users-list-name" href="#">Susan</a>
                                                     <span class="users-list-date">Today</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=35" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('35');" alt="User Image">
                                                     <a class="users-list-name" href="#">Norman</a>
                                                     <span class="users-list-date">Yesterday</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=14" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('14');" alt="User Image">
                                                     <a class="users-list-name" href="#">Jane</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=18" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('18');" alt="User Image">
                                                     <a class="users-list-name" href="#">John</a>
                                                     <span class="users-list-date">12 Jan</span>
                                                 </li>
                                                 <li>
-                                                    <img src="http://i.pravatar.cc/128?img=37" alt="User Image">
+                                                    <img src="./images/default.png" onload="this.onload=null; this.src=get_identicon('37');" alt="User Image">
                                                     <a class="users-list-name" href="#">Alexander</a>
                                                     <span class="users-list-date">13 Jan</span>
                                                 </li>
