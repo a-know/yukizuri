@@ -19,6 +19,9 @@ body {
 #service-name {
   color: #af1342;
 }
+#member-name {
+  color: #af1342;
+}
 .members-count {
   position: relative;
   top: -2px;

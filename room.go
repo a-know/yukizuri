@@ -53,7 +53,7 @@ func (r *room) run() {
 			r.number++
 			r.members = append(r.members, client.userData["name"].(string))
 
-			message := fmt.Sprintf("Joined a new client. Joined members count: %d", r.number)
+			message := fmt.Sprintf("Joined a new member, %s !", client.userData["name"].(string))
 			r.tracer.Trace(message)
 			// send system message
 			msg := makeSystemMessage(message)
@@ -66,7 +66,7 @@ func (r *room) run() {
 			r.number--
 			r.members = remove(r.members, client.userData["name"].(string))
 
-			message := fmt.Sprintf("Leave a client. Joined members count: %d", r.number)
+			message := fmt.Sprintf("%s left. Good bye.", client.userData["name"].(string))
 			r.tracer.Trace(message)
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
