@@ -25,8 +25,8 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"Host": r.Host,
 	}
-	if authCoockie, err := r.Cookie("auth"); err == nil {
-		data["UserData"] = objx.MustFromBase64(authCoockie.Value)
+	if cookie, err := r.Cookie("yukizuri"); err == nil {
+		data["UserData"] = objx.MustFromBase64(cookie.Value)
 	}
 	t.templ.Execute(w, data)
 }
@@ -36,12 +36,12 @@ func main() {
 	var logging = flag.Bool("logging", true, "logging with stdout")
 	flag.Parse()
 	r := newRoom(*logging)
-	http.Handle("/chat", MustAuth(&templateHandler{filename: "yukizuri.html"}))
-	http.Handle("/login", &templateHandler{filename: "login.html"})
-	http.Handle("/", &templateHandler{filename: "login.html"})
+	http.Handle("/chat", MustJoin(&templateHandler{filename: "yukizuri.html"}))
+	http.Handle("/join", &templateHandler{filename: "join.html"})
+	http.Handle("/", &templateHandler{filename: "join.html"})
 	http.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
-			Name:   "auth",
+			Name:   "yukizuri",
 			Value:  "",
 			Path:   "/",
 			MaxAge: -1,
@@ -49,7 +49,7 @@ func main() {
 		w.Header()["Location"] = []string{"/chat"}
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
-	http.HandleFunc("/auth/", loginHandler)
+	http.HandleFunc("/join/", joinHandler)
 	http.Handle("/room", r) // for WebSocket connection endpoint
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./js"))))
