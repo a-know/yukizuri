@@ -5,4 +5,7 @@ serve:
 
 build:
 	go build -o yukizuri.bin
-	
+
+deploy:
+	GOOS=linux GOARCH=amd64 go build -o yukizuri.bin
+	rsync -a --backup-dir=./.rsync_backup/$(LANG=C date +%Y%m%d%H%M%S) -e ssh ./* webapp:/var/www/yukizuri
