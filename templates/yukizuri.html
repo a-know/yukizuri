@@ -89,7 +89,7 @@
         if (!window["WebSocket"]) {
             alert("Error : This browser not supports WebSocket.");
         } else {
-            socket = new WebSocket("ws://{{.Host}}/room");
+            socket = new WebSocket("ws://" + location.host + "/room");
             socket.onclose = function() {
             // alert("Connection closed.");
             }
@@ -195,7 +195,7 @@
             <div class="content-wrapper-inner">
                 <div class="content-wrapper dashboard-page">
                     <header class="main-header">
-                        <a href="./index.html" class="logo">
+                        <a href="/leave" class="logo">
                             <span class="logo-lg"><img src="./images/yukizuri-logo.png" id="logoimage"></span>
                         </a>
                         <nav class="navbar navbar-static-top">
