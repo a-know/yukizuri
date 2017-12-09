@@ -51,15 +51,17 @@ func (r *room) run() {
 			r.clients[client] = true
 			// keep state
 			r.number++
+			name := client.userData["name"].(string)
+			remoteAddr := client.socket.RemoteAddr().String()
 			r.members = append(
 				r.members,
 				objx.New(map[string]interface{}{
-					"name":        client.userData["name"].(string),
-					"remote_addr": client.socket.RemoteAddr().String(),
+					"name":        name,
+					"remote_addr": remoteAddr,
 				}),
 			)
 
-			message := fmt.Sprintf("Joined a new member, %s (%s) !", client.userData["name"].(string), client.socket.RemoteAddr().String())
+			message := fmt.Sprintf("Joined a new member, %s (%s) !", name, remoteAddr)
 			r.tracer.Trace(message)
 			// send system message
 			msg := makeSystemMessage(message)
@@ -70,15 +72,18 @@ func (r *room) run() {
 			close(client.send)
 			// keep state
 			r.number--
+			name := client.userData["name"].(string)
+			remoteAddr := client.socket.RemoteAddr().String()
+
 			r.members = remove(
 				r.members,
 				objx.New(map[string]interface{}{
-					"name":        client.userData["name"].(string),
-					"remote_addr": client.socket.RemoteAddr().String(),
+					"name":        name,
+					"remote_addr": remoteAddr,
 				}),
 			)
 
-			message := fmt.Sprintf("%s (%s) left. Good bye.", client.userData["name"].(string), client.socket.RemoteAddr().String())
+			message := fmt.Sprintf("%s (%s) left. Good bye.", name, remoteAddr)
 			r.tracer.Trace(message)
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
