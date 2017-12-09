@@ -94,14 +94,14 @@
             // alert("Connection closed.");
             }
             socket.onmessage = function(e) {
-                var msg = JSON.parse(e.data)
+                var msg = JSON.parse(e.data);
                 if (msg.Name == "{{.UserData.name}}") {
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg right")
                         .append(
                             $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
-                                $("<span>").attr("class", "chat-box-name pull-right").text(msg.Name))
+                                $("<span>").attr("class", "chat-box-name pull-right").text(msg.Name + " (" + msg.RemoteAddr + ")"))
                             .append(
                                 $("<span>").attr("class", "chat-box-timestamp pull-left").text((new Date(msg.When)))
                             )
@@ -114,18 +114,21 @@
                         )
                     );
                 } else {
-                    var icon = ""
+                    var icon = "";
+                    var name = "";
                     if (msg.Name == "Yukizuri-sys") {
-                        icon = "./images/yukizuri-sys.png"
+                        icon = "./images/yukizuri-sys.png";
+                        name = "Yukizuri-sys";
                     } else {
-                        icon = get_identicon(msg.Name)
+                        icon = get_identicon(msg.Name);
+                        name = msg.Name + " (" + msg.RemoteAddr + ")";
                     }
                     messages.prepend(
                         $("<div>").attr("class", "chat-box-msg left")
                         .append(
                             $("<div>").attr("class", "chat-box-danger clearfix")
                             .append(
-                                $("<span>").attr("class", "chat-box-name pull-left").text(msg.Name))
+                                $("<span>").attr("class", "chat-box-name pull-left").text(name))
                             .append(
                                 $("<span>").attr("class", "chat-box-timestamp pull-right").text((new Date(msg.When)))
                             )
@@ -142,19 +145,22 @@
                     $("#members-box").empty();
                     for(let i = 0; i < msg.CurrentMembers.length; i++) {
                         var memberName = "";
-                        if ("{{.UserData.name}}" == msg.CurrentMembers[i]) {
-                            memberName = msg.CurrentMembers[i] + " (You)";
+                        if ("{{.UserData.name}}" == msg.CurrentMembers[i]["name"]) {
+                            memberName = msg.CurrentMembers[i]["name"] + " (You)";
                         } else {
-                            memberName = msg.CurrentMembers[i];
+                            memberName = msg.CurrentMembers[i]["name"];
                         }
                         $("#members-box")
                         .append(
                             $("<li>")
                             .append(
-                                $("<img>").attr("src", get_identicon(msg.CurrentMembers[i]))
+                                $("<img>").attr("src", get_identicon(msg.CurrentMembers[i]["name"]))
                             )
                             .append(
                                 $("<span>").attr("class", "users-list-date").text(memberName)
+                            )
+                            .append(
+                                $("<span>").attr("class", "users-list-date").text(msg.CurrentMembers[i]["remote_addr"])
                             )
                         );
                     }
@@ -222,7 +228,7 @@
                                     <!-- DIRECT CHAT -->
                                     <div class="box box-primary box-solid box-default chat-box chat-box-danger" data-aos="fade-up">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">{{.UserData.name}}</h3>
+                                            <h3 class="box-title">{{.UserData.name}} ({{.UserData.remote_addr}})</h3>
                                         </div><!-- /.box-header -->
                                         <div class="box-body">
                                             <!-- Conversations are loaded here -->

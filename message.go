@@ -9,5 +9,6 @@ type message struct {
 	Message        string
 	When           time.Time
 	AvatarURL      string
-	CurrentMembers []string
+	CurrentMembers []map[string]interface{}
+	RemoteAddr     string
 }

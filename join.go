@@ -42,10 +42,11 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(m, strings.ToLower(time.Now().String()))
 		uniqueID := fmt.Sprintf("%x", m.Sum(nil))
 		cookieValue := objx.New(map[string]interface{}{
-			"userid":     uniqueID,
-			"name":       nickname,
-			"avatar_url": "",
-			"email":      "",
+			"userid":      uniqueID,
+			"name":        nickname,
+			"avatar_url":  "",
+			"email":       "",
+			"remote_addr": r.RemoteAddr,
 		}).MustBase64()
 		http.SetCookie(w, &http.Cookie{
 			Name:  "yukizuri",
