@@ -18,11 +18,6 @@ func New() Tracer {
 	return &tracer{}
 }
 
-// func (t *tracer) Trace(a ...interface{}) {
-// 	t.out.Write([]byte(fmt.Sprint(a...)))
-// 	t.out.Write([]byte("\n"))
-// }
-
 func (t *tracer) LogContent(kind string, username string, remoteAddr string, message string) map[string]interface{} {
 	content := map[string]interface{}{
 		"kind":        kind,
