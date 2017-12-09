@@ -59,7 +59,7 @@ func (r *room) run() {
 				}),
 			)
 
-			message := fmt.Sprintf("Joined a new member, %s !", client.userData["name"].(string))
+			message := fmt.Sprintf("Joined a new member, %s (%s) !", client.userData["name"].(string), client.socket.RemoteAddr().String())
 			r.tracer.Trace(message)
 			// send system message
 			msg := makeSystemMessage(message)
@@ -78,12 +78,13 @@ func (r *room) run() {
 				}),
 			)
 
-			message := fmt.Sprintf("%s left. Good bye.", client.userData["name"].(string))
+			message := fmt.Sprintf("%s (%s) left. Good bye.", client.userData["name"].(string), client.socket.RemoteAddr().String())
 			r.tracer.Trace(message)
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
 		case msg := <-r.forward:
-			r.tracer.Trace("Receive a message: ", msg.Message)
+			message := fmt.Sprintf("Receive a message: %s, by %s (%s)", msg.Message, msg.Name, msg.RemoteAddr)
+			r.tracer.Trace(message)
 			sendMessageAllClients(r, msg)
 		}
 	}
