@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/a-know/yukizuri/trace"
+
 	"github.com/stretchr/objx"
 )
 
@@ -56,6 +58,8 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	} else {
 		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, "Not supported request: %s", r.URL.Path)
+		tracer := trace.New()
+		logContent := tracer.LogContent("system", "-", r.RemoteAddr, "-")
+		tracer.TraceError(logContent, fmt.Errorf("Not supported request: %s", r.URL.Path))
 	}
 }

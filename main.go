@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
-	"log"
 	"net/http"
 	"path/filepath"
 	"sync"
 	"text/template"
+
+	"github.com/a-know/yukizuri/trace"
 
 	"github.com/stretchr/objx"
 )
@@ -59,8 +60,11 @@ func main() {
 	// Starting chatroom
 	go r.run()
 	// Starting web server
-	log.Println("Starting Web server... port : ", *addr)
+	tracer := trace.New()
+	logContent := tracer.LogContent("system", "-", "-", "Starting Web server...")
+	tracer.TraceInfo(logContent)
 	if err := http.ListenAndServe(*addr, nil); err != nil {
-		log.Fatal("ListenAndServe:", err)
+		logContent := tracer.LogContent("system", "-", "-", "ListenAndServe")
+		tracer.TraceError(logContent, err)
 	}
 }
