@@ -19,6 +19,7 @@ func (c *client) read() {
 		var msg *message
 		if err := c.socket.ReadJSON(&msg); err == nil {
 			msg.When = time.Now()
+			msg.RemoteAddr = c.socket.RemoteAddr().String()
 			msg.Name = c.userData["name"].(string)
 			if avatarURL, ok := c.userData["avatar_url"]; ok {
 				msg.AvatarURL = avatarURL.(string)

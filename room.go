@@ -26,7 +26,7 @@ type room struct {
 	// joined members number
 	number int
 	// joined members nickname slice
-	members []string
+	members []map[string]interface{}
 }
 
 func newRoom(logging bool) *room {
@@ -51,7 +51,13 @@ func (r *room) run() {
 			r.clients[client] = true
 			// keep state
 			r.number++
-			r.members = append(r.members, client.userData["name"].(string))
+			r.members = append(
+				r.members,
+				objx.New(map[string]interface{}{
+					"name":        client.userData["name"].(string),
+					"remote_addr": client.socket.RemoteAddr().String(),
+				}),
+			)
 
 			message := fmt.Sprintf("Joined a new member, %s !", client.userData["name"].(string))
 			r.tracer.Trace(message)
@@ -64,7 +70,13 @@ func (r *room) run() {
 			close(client.send)
 			// keep state
 			r.number--
-			r.members = remove(r.members, client.userData["name"].(string))
+			r.members = remove(
+				r.members,
+				objx.New(map[string]interface{}{
+					"name":        client.userData["name"].(string),
+					"remote_addr": client.socket.RemoteAddr().String(),
+				}),
+			)
 
 			message := fmt.Sprintf("%s left. Good bye.", client.userData["name"].(string))
 			r.tracer.Trace(message)
@@ -77,10 +89,10 @@ func (r *room) run() {
 	}
 }
 
-func remove(strings []string, search string) []string {
-	result := []string{}
-	for _, v := range strings {
-		if v != search {
+func remove(maps []map[string]interface{}, search map[string]interface{}) []map[string]interface{} {
+	var result []map[string]interface{}
+	for _, v := range maps {
+		if v["name"] != search["name"] && v["remote_addr"] != search["remote_addr"] {
 			result = append(result, v)
 		}
 	}
