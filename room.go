@@ -1,10 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/a-know/yukizuri/trace"
@@ -30,7 +29,7 @@ type room struct {
 }
 
 func newRoom(logging bool) *room {
-	tracer := trace.New(os.Stdout)
+	tracer := trace.New()
 	if !logging {
 		tracer = trace.Off()
 	}
@@ -62,7 +61,8 @@ func (r *room) run() {
 			)
 
 			message := fmt.Sprintf("Joined a new member, %s (%s) !", name, remoteAddr)
-			r.tracer.Trace(message)
+			logContent := r.tracer.LogContent("join", name, remoteAddr, "-")
+			r.tracer.TraceInfo(logContent)
 			// send system message
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
@@ -84,12 +84,13 @@ func (r *room) run() {
 			)
 
 			message := fmt.Sprintf("%s (%s) left. Good bye.", name, remoteAddr)
-			r.tracer.Trace(message)
+			logContent := r.tracer.LogContent("leave", name, remoteAddr, "-")
+			r.tracer.TraceInfo(logContent)
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
 		case msg := <-r.forward:
-			message := fmt.Sprintf("Receive a message: %s, by %s (%s)", msg.Message, msg.Name, msg.RemoteAddr)
-			r.tracer.Trace(message)
+			logContent := r.tracer.LogContent("forward", msg.Name, msg.RemoteAddr, msg.Message)
+			r.tracer.TraceInfo(logContent)
 			sendMessageAllClients(r, msg)
 		}
 	}
@@ -120,12 +121,12 @@ func sendMessageAllClients(r *room, msg *message) {
 		select {
 		case client.send <- msg:
 			// send a message
-			r.tracer.Trace(" -- Send a message: ", msg.Message)
 		default:
 			// fail to sending message
 			delete(r.clients, client)
 			close(client.send)
-			r.tracer.Trace(" -- Failed to send a message. Cleanup client...")
+			logContent := r.tracer.LogContent("system", msg.Name, msg.RemoteAddr, msg.Message)
+			r.tracer.TraceError(logContent, errors.New("Failed to send a message. Cleanup client..."))
 		}
 	}
 }
@@ -141,13 +142,15 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// for using websocket. Upgrade HTTP connection by websocket.Upgrader
 	socket, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
-		log.Fatal("ServeHTTP:", err)
+		logContent := r.tracer.LogContent("system", "-", req.RemoteAddr, "ServeHTTP")
+		r.tracer.TraceError(logContent, err)
 		return
 	}
 
 	cookie, err := req.Cookie("yukizuri")
 	if err != nil {
-		log.Fatal("Failed to get cookie data:", err)
+		logContent := r.tracer.LogContent("system", "-", req.RemoteAddr, "Failed to get cookie data")
+		r.tracer.TraceError(logContent, err)
 		return
 	}
 	client := &client{
