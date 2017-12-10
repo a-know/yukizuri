@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"sync"
@@ -21,7 +22,23 @@ type templateHandler struct {
 // Handling HTTP Request
 func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
-		t.templ = template.Must(template.ParseFiles(filepath.Join("templates", t.filename)))
+		f, err := Assets.Open(filepath.Join("/templates", t.filename))
+		if err != nil {
+			tracer := trace.New()
+			logContent := tracer.LogContent("system", "-", "-", "TemplateHandler")
+			tracer.TraceError(logContent, err)
+		}
+		defer f.Close()
+
+		data, err := ioutil.ReadAll(f)
+		if err != nil {
+			tracer := trace.New()
+			logContent := tracer.LogContent("system", "-", "-", "TemplateHandler")
+			tracer.TraceError(logContent, err)
+		}
+
+		var ns = template.New("template")
+		t.templ, _ = ns.Parse(string(data))
 	})
 	data := map[string]interface{}{
 		"Host": r.Host,
