@@ -91,7 +91,25 @@
         } else {
             socket = new WebSocket("ws://" + location.host + "/room");
             socket.onclose = function() {
-            // alert("Connection closed.");
+                var icon = "./images/yukizuri-sys.png";
+                var name = "Yukizuri-sys";
+                messages.prepend(
+                    $("<div>").attr("class", "chat-box-msg left")
+                    .append(
+                        $("<div>").attr("class", "chat-box-danger clearfix")
+                        .append(
+                            $("<span>").attr("class", "chat-box-name pull-left").text(name))
+                        .append(
+                            $("<span>").attr("class", "chat-box-timestamp pull-right").text((new Date()))
+                        )
+                    )
+                    .append(
+                        $("<img>").attr("class", "chat-box-img").attr("src", icon)
+                    )
+                    .append(
+                        $("<div>").attr("class", "chat-box-text").text("Connection closed. Please reload this page.")
+                    )
+                );
             }
             socket.onmessage = function(e) {
                 var msg = JSON.parse(e.data);
