@@ -39,7 +39,7 @@ $(function(){
         }
         socket.onmessage = function(e) {
             var msg = JSON.parse(e.data);
-            if (msg.Name == "{{.UserData.name}}") {
+            if (msg.Name == loginUserName) {
                 messages.prepend(
                     $("<div>").attr("class", "chat-box-msg right")
                     .append(
@@ -89,7 +89,7 @@ $(function(){
                 $("#members-box").empty();
                 for(let i = 0; i < msg.CurrentMembers.length; i++) {
                     var memberName = "";
-                    if ("{{.UserData.name}}" == msg.CurrentMembers[i]["name"]) {
+                    if (loginUserName == msg.CurrentMembers[i]["name"]) {
                         memberName = msg.CurrentMembers[i]["name"] + " (You)";
                     } else {
                         memberName = msg.CurrentMembers[i]["name"];
