@@ -71,6 +71,11 @@
 
     <!--build:js /js/main.min.js -->
     <script src="./plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script>
+        $(function(){
+            loginUserName = "{{.UserData.name}}";
+        });
+    </script>
     <script src="./plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="./plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="./plugins/aos/aos.js"></script>
