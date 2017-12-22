@@ -9,7 +9,7 @@ import (
 	"text/template"
 
 	"github.com/a-know/yukizuri/trace"
-
+	"github.com/fukata/golang-stats-api-handler"
 	"github.com/stretchr/objx"
 )
 
@@ -68,6 +68,7 @@ func main() {
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
 	http.HandleFunc("/join/", joinHandler)
+	http.HandleFunc("/api/stats", stats_api.Handler)
 	http.Handle("/room", r) // for WebSocket connection endpoint
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./js"))))
