@@ -48,7 +48,7 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 			"name":        nickname,
 			"avatar_url":  "",
 			"email":       "",
-			"remote_addr": r.RemoteAddr,
+			"remote_addr": r.Header.Get("X-Forwarded-For"),
 		}).MustBase64()
 		http.SetCookie(w, &http.Cookie{
 			Name:  "yukizuri",
@@ -59,7 +59,7 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 		tracer := trace.New()
-		logContent := tracer.LogContent("system", "-", r.RemoteAddr, "-")
+		logContent := tracer.LogContent("system", "-", r.Header.Get("X-Forwarded-For"), "-")
 		tracer.TraceError(logContent, fmt.Errorf("Not supported request: %s", r.URL.Path))
 	}
 }
