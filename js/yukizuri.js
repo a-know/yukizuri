@@ -15,7 +15,7 @@ $(function(){
     if (!window["WebSocket"]) {
         alert("Error : This browser not supports WebSocket.");
     } else {
-        socket = new WebSocket("ws://" + location.host + "/room");
+        socket = new WebSocket("wss://" + location.host + "/room");
         socket.onclose = function() {
             var icon = "./images/yukizuri-sys.png";
             var name = "Yukizuri-sys";

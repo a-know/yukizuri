@@ -51,7 +51,7 @@ func (r *room) run() {
 			// keep state
 			r.number++
 			name := client.userData["name"].(string)
-			remoteAddr := client.socket.RemoteAddr().String()
+			remoteAddr := client.userData["remote_addr"].(string)
 			r.members = append(
 				r.members,
 				objx.New(map[string]interface{}{
@@ -73,7 +73,7 @@ func (r *room) run() {
 			// keep state
 			r.number--
 			name := client.userData["name"].(string)
-			remoteAddr := client.socket.RemoteAddr().String()
+			remoteAddr := client.userData["remote_addr"].(string)
 
 			r.members = remove(
 				r.members,
@@ -99,7 +99,7 @@ func (r *room) run() {
 func remove(maps []map[string]interface{}, search map[string]interface{}) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, v := range maps {
-		if v["name"] != search["name"] && v["remote_addr"] != search["remote_addr"] {
+		if v["name"] != search["name"] || v["remote_addr"] != search["remote_addr"] {
 			result = append(result, v)
 		}
 	}
@@ -142,14 +142,14 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// for using websocket. Upgrade HTTP connection by websocket.Upgrader
 	socket, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
-		logContent := r.tracer.LogContent("system", "-", req.RemoteAddr, "ServeHTTP")
+		logContent := r.tracer.LogContent("system", "-", req.Header.Get("X-Forwarded-For"), "ServeHTTP")
 		r.tracer.TraceError(logContent, err)
 		return
 	}
 
 	cookie, err := req.Cookie("yukizuri")
 	if err != nil {
-		logContent := r.tracer.LogContent("system", "-", req.RemoteAddr, "Failed to get cookie data")
+		logContent := r.tracer.LogContent("system", "-", req.Header.Get("X-Forwarded-For"), "Failed to get cookie data")
 		r.tracer.TraceError(logContent, err)
 		return
 	}
