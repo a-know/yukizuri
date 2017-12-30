@@ -99,7 +99,9 @@ func (r *room) run() {
 func remove(maps []map[string]interface{}, search map[string]interface{}) []map[string]interface{} {
 	var result []map[string]interface{}
 	for _, v := range maps {
-		if v["name"] != search["name"] || v["remote_addr"] != search["remote_addr"] {
+		if v["name"] == search["name"] && v["remote_addr"] == search["remote_addr"] {
+			// no operation
+		} else {
 			result = append(result, v)
 		}
 	}
