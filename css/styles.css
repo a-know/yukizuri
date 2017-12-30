@@ -1198,3 +1198,7 @@ button,
 .skin-deep-blue .page-loader .preloader-lg:after {
   border-top: 3px solid #00695c;
 }
+
+#join-alert {
+  color: #af1342;
+}
