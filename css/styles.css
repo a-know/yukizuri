@@ -859,7 +859,6 @@ button,
 }
 .box-header .box-title {
   display: inline-block;
-  text-transform: uppercase;
   letter-spacing: 1px;
   margin: 0;
   line-height: 1;
