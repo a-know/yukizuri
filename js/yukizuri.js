@@ -1,5 +1,6 @@
 $(function(){
     var socket = null;
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     var msgBox = $("#chatbox #message");
     var messages = $("#chat-box-messages");
     $("#chatbox").submit(function(){
@@ -54,7 +55,7 @@ $(function(){
                         $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
                     )
                     .append(
-                        $("<div>").attr("class", "chat-box-text").text(msg.Message)
+                        $("<div>").attr("class", "chat-box-text").html(msg.Message.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').replace(exp,"<a href='$1'>$1</a>"))
                     )
                 );
             } else {
@@ -81,7 +82,7 @@ $(function(){
                         $("<img>").attr("class", "chat-box-img").attr("src", icon)
                     )
                     .append(
-                        $("<div>").attr("class", "chat-box-text").text(msg.Message)
+                        $("<div>").attr("class", "chat-box-text").html(msg.Message.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').replace(exp,"<a href='$1'>$1</a>"))
                     )
                 );
                 // refresh members list

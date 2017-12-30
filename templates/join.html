@@ -89,7 +89,7 @@
         <div class="login-box-body">
             <p class="login-box-msg">To join <span id="service-name">Yukizuri</span>, just decide nickname!</p>
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" placeholder="Nickname" id="nickname">
+                <input type="text" class="form-control" placeholder="Nickname" id="nickname" maxlength="16">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="row">
@@ -99,6 +99,7 @@
                     <button type="input" class="btn btn-primary btn-block" onClick="join();">Join!</button>
                 </div><!-- /.col -->
             </div>
+            <p id="join-alert"></p>
             <p class="login-box-msg"><span id="service-name">Yukizuri</span> is a real-time chat service which conversation log is not left. Enjoy conversation just to suit the occasion!</p>
         </div><!-- /.login-box-body -->
         <footer class="main-footer">
