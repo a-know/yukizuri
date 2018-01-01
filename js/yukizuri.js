@@ -16,7 +16,7 @@ $(function(){
     if (!window["WebSocket"]) {
         alert("Error : This browser not supports WebSocket.");
     } else {
-        socket = new WebSocket("wss://" + location.host + "/room");
+        socket = new WebSocket(get_ws_protocol() + "//" + location.host + "/room");
         socket.onclose = function() {
             var icon = "./images/yukizuri-sys.png";
             var name = "Yukizuri-sys";
@@ -125,3 +125,13 @@ function get_identicon(text) {
     var data = new Identicon(hash, size).toString();
     return 'data:image/png;base64,' + data;
 }
+
+function get_ws_protocol() {
+    var localhosts = ["localhost", "127.0.0.1"];
+    if (localhosts.indexOf(location.hostname) >= 0) {
+        return "ws:";
+    } else {
+        return "wss:";
+    }
+}
+
