@@ -6,8 +6,8 @@ $(function(){
     $("#chatbox").submit(function(){
         if (!msgBox.val()) return false;
         if (!socket) {
-        alert("Error : Not established WebSocket connection.");
-        return false;
+            alert("Error : Not established WebSocket connection.");
+            return false;
         }
         socket.send(JSON.stringify({"Message": msgBox.val()}));
         msgBox.val("");
