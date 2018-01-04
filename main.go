@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -49,6 +50,13 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, data)
 }
 
+func heartbeatHandler(w http.ResponseWriter, r *http.Request) {
+	tracer := trace.New()
+	logContent := tracer.LogContent("system", "-", "-", "heartbeat")
+	tracer.TraceInfo(logContent)
+	fmt.Fprintf(w, "OK")
+}
+
 func main() {
 	var addr = flag.String("addr", ":8080", "port number")
 	var logging = flag.Bool("logging", true, "logging with stdout")
@@ -67,6 +75,7 @@ func main() {
 		w.Header()["Location"] = []string{"/chat"}
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
+	http.HandleFunc("/heartbeat", heartbeatHandler)
 	http.HandleFunc("/join/", joinHandler)
 	http.HandleFunc("/api/stats", stats_api.Handler)
 	http.Handle("/room", r) // for WebSocket connection endpoint
