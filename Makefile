@@ -19,9 +19,9 @@ deploy:
 deploy-prod:
 	go-assets-builder --package=main templates/ > templates.go
 	GOOS=linux GOARCH=amd64 go build -o yukizuri.bin
-	rsync -a --backup-dir=./.rsync_backup/$(LANG=C date +%Y%m%d%H%M%S) -e ssh ./* yukizuri.moshimo.works:/var/www/yukizuri/app
-	ssh yukizuri.moshimo.works sudo systemctl daemon-reload
-	ssh yukizuri.moshimo.works sudo systemctl restart yukizuri
+	rsync -a --backup-dir=./.rsync_backup/$(LANG=C date +%Y%m%d%H%M%S) -e ssh ./* mstdn6.a-know.me:/var/www/yukizuri/app
+	ssh mstdn6.a-know.me sudo systemctl daemon-reload
+	ssh mstdn6.a-know.me sudo systemctl restart yukizuri
 
 deploy-stg:
 	go-assets-builder --package=main templates/ > templates.go
