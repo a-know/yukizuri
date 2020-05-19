@@ -1002,6 +1002,9 @@ button,
 .chat-box-danger .right > .chat-box-text:before {
   border-left-color: #e17978;
 }
+.chat-box-text > img {
+  max-width: 100%;
+}
 .users-list > li {
   width: 33%;
   float: left;
