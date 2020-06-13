@@ -740,14 +740,6 @@ button,
   .main-header {
     position: relative;
   }
-  .main-header .logo,
-  .main-header .navbar {
-    width: 100%;
-    float: none;
-  }
-  .main-header .navbar {
-    margin: 0;
-  }
   .main-header .navbar-custom-menu {
     float: right;
   }
