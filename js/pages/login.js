@@ -12,3 +12,9 @@ function join(){
         $('#nickname').focus();
     }
 }
+
+function enter(){
+    if( window.event.keyCode === 13 ){
+        join();
+    }
+}
