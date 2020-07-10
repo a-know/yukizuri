@@ -56,7 +56,7 @@ $(function(){
                         $("<img>").attr("class", "chat-box-img").attr("src", get_identicon(msg.Name))
                     )
                     .append(
-                        $("<div>").attr("class", "chat-box-text").html(msg.Message.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').replace(exp,"<a href='$1'>$1</a>").replace(imageExp,"<img src='data:image/$1' />"))
+                        $("<div>").attr("class", "chat-box-text").html(msg.Message.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').replace(exp,"<a href='$1' target='_blank' rel='noopener norefferer'>$1</a>").replace(imageExp,"<img src='data:image/$1' />"))
                     )
                 );
             } else {
