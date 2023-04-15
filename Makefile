@@ -4,6 +4,8 @@ serve:
 	./yukizuri.bin -addr=":8080" -logging=true
 
 build:
+	go mod download
+	go get github.com/jessevdk/go-assets
 	go-assets-builder --package=main templates/ > templates.go
 	go build -o yukizuri.bin
 
