@@ -5,7 +5,7 @@ serve:
 
 build:
 	go mod download
-	go install -v github.com/jessevdk/go-assets-builder
+	go get github.com/jessevdk/go-assets-builder
 	go-assets-builder --package=main templates/ > templates.go
 	go build -o yukizuri.bin
 
