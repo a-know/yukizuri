@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"context"
+
 	"github.com/a-know/yukizuri/trace"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/objx"
@@ -26,23 +28,39 @@ type room struct {
 	number int
 	// joined members nickname slice
 	members []map[string]interface{}
+	// OpenAI API Token
+	openaitoken string
 }
 
-func newRoom(logging bool) *room {
+func newRoom(logging bool, openaitoken string) *room {
 	tracer := trace.New()
 	if !logging {
 		tracer = trace.Off()
 	}
 	return &room{
-		forward: make(chan *message),
-		join:    make(chan *client),
-		leave:   make(chan *client),
-		clients: make(map[*client]bool),
-		tracer:  tracer,
+		forward:     make(chan *message),
+		join:        make(chan *client),
+		leave:       make(chan *client),
+		clients:     make(map[*client]bool),
+		tracer:      tracer,
+		openaitoken: openaitoken,
 	}
 }
 
 func (r *room) run() {
+	// botのメッセージを保持するスライス
+	var messages []*ChatMessage
+
+	// OpenAIのクライアントを作成
+	cli, err := NewClient(r.openaitoken)
+	if err != nil {
+		panic(err)
+	}
+
+	// 人格呼び出し
+	personality := GetPersonality("zuri")
+	ctx := context.Background()
+
 	for {
 		select {
 		case client := <-r.join:
@@ -92,6 +110,26 @@ func (r *room) run() {
 			if msg.Message != "pingpongpangpong" {
 				logContent := r.tracer.LogContent("forward", msg.Name, msg.RemoteAddr, msg.Message)
 				r.tracer.TraceInfo(logContent)
+				sendMessageAllClients(r, msg)
+
+				// botに反応させる
+				// ユーザーの発言を受け取る
+				userMessage := NewChatMessage(RoleUser, msg.Name, "")
+				userMessage.Text = msg.Message
+				messages = append(messages, userMessage)
+
+				// OpenAIのAPIを叩いて、AIの発言を作成
+				message, err := cli.Completion(ctx, msg.Name, personality, messages)
+				if err != nil {
+					fmt.Println("error:", err.Error())
+					continue
+				}
+				fmt.Printf("[%s]\n", message)
+				messages = append(messages, message)
+
+				// bot のメッセージを送信
+				msg.Name = "ずり"
+				msg.Message = message.Text
 				sendMessageAllClients(r, msg)
 			}
 		}

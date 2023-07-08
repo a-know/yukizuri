@@ -10,7 +10,7 @@ import (
 	"text/template"
 
 	"github.com/a-know/yukizuri/trace"
-	"github.com/fukata/golang-stats-api-handler"
+	stats_api "github.com/fukata/golang-stats-api-handler"
 	"github.com/stretchr/objx"
 )
 
@@ -59,9 +59,10 @@ func heartbeatHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var addr = flag.String("addr", ":8080", "port number")
+	var openaitoken = flag.String("openaitoken", "openaitoken", "OpenAI API Token String")
 	var logging = flag.Bool("logging", true, "logging with stdout")
 	flag.Parse()
-	r := newRoom(*logging)
+	r := newRoom(*logging, *openaitoken)
 	http.Handle("/chat", MustJoin(&templateHandler{filename: "yukizuri.html"}))
 	http.Handle("/join", &templateHandler{filename: "join.html"})
 	http.Handle("/", &templateHandler{filename: "join.html"})
