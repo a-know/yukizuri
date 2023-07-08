@@ -89,9 +89,11 @@ func (r *room) run() {
 			msg := makeSystemMessage(message)
 			sendMessageAllClients(r, msg)
 		case msg := <-r.forward:
-			logContent := r.tracer.LogContent("forward", msg.Name, msg.RemoteAddr, msg.Message)
-			r.tracer.TraceInfo(logContent)
-			sendMessageAllClients(r, msg)
+			if msg.Message != "pingpongpangpong" {
+				logContent := r.tracer.LogContent("forward", msg.Name, msg.RemoteAddr, msg.Message)
+				r.tracer.TraceInfo(logContent)
+				sendMessageAllClients(r, msg)
+			}
 		}
 	}
 }

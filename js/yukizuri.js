@@ -113,6 +113,12 @@ $(function(){
                 }
             }
         }
+        socket.onopen = function () {
+            // 180秒ごとにpingを送信
+            setInterval(function () {
+                socket.send(JSON.stringify({"Message": "pingpongpangpong"}));
+            }, 180000);
+        };
     }
 });
 
