@@ -50,7 +50,7 @@ func newRoom(logging bool, openaitoken string) *room {
 
 func (r *room) run() {
 	// botのメッセージを保持するスライス
-	var messages []*ChatMessage
+	var messagesForZuri []*ChatMessage
 
 	// OpenAIのクライアントを作成
 	cli, err := NewClient(r.openaitoken)
@@ -58,8 +58,6 @@ func (r *room) run() {
 		panic(err)
 	}
 
-	// 人格呼び出し
-	personality := GetPersonality("zuri")
 	ctx := context.Background()
 
 	for {
@@ -119,10 +117,13 @@ func (r *room) run() {
 					// ユーザーの発言を受け取る
 					userMessage := NewChatMessage(RoleUser, msg.Name, "")
 					userMessage.Text = msg.Message
-					messages = append(messages, userMessage)
+					messagesForZuri = append(messagesForZuri, userMessage)
+
+					// 人格呼び出し
+					personality := GetPersonality("zuri")
 
 					// OpenAIのAPIを叩いて、AIの発言を作成
-					message, err := cli.Completion(ctx, msg.Name, personality, messages)
+					message, err := cli.Completion(ctx, msg.Name, personality, messagesForZuri)
 					if err != nil {
 						fmt.Println("error:", err.Error())
 						continue
