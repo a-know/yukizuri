@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"time"
 
 	"context"
@@ -112,25 +113,27 @@ func (r *room) run() {
 				r.tracer.TraceInfo(logContent)
 				sendMessageAllClients(r, msg)
 
-				// botに反応させる
-				// ユーザーの発言を受け取る
-				userMessage := NewChatMessage(RoleUser, msg.Name, "")
-				userMessage.Text = msg.Message
-				messages = append(messages, userMessage)
+				// 「ずり」という単語があったときだけbotに反応させる
+				reg := regexp.MustCompile(`ずり`)
+				if reg.MatchString(msg.Message) {
+					// ユーザーの発言を受け取る
+					userMessage := NewChatMessage(RoleUser, msg.Name, "")
+					userMessage.Text = msg.Message
+					messages = append(messages, userMessage)
 
-				// OpenAIのAPIを叩いて、AIの発言を作成
-				message, err := cli.Completion(ctx, msg.Name, personality, messages)
-				if err != nil {
-					fmt.Println("error:", err.Error())
-					continue
+					// OpenAIのAPIを叩いて、AIの発言を作成
+					message, err := cli.Completion(ctx, msg.Name, personality, messages)
+					if err != nil {
+						fmt.Println("error:", err.Error())
+						continue
+					}
+					fmt.Printf("[%s]\n", message)
+
+					// bot のメッセージを送信
+					msg.Name = "ずり"
+					msg.Message = message.Text
+					sendMessageAllClients(r, msg)
 				}
-				fmt.Printf("[%s]\n", message)
-				messages = append(messages, message)
-
-				// bot のメッセージを送信
-				msg.Name = "ずり"
-				msg.Message = message.Text
-				sendMessageAllClients(r, msg)
 			}
 		}
 	}
