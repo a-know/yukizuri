@@ -51,6 +51,7 @@ func newRoom(logging bool, openaitoken string) *room {
 func (r *room) run() {
 	// botのメッセージを保持するスライス
 	var messagesForZuri []*ChatMessage
+	var messagesForYuki []*ChatMessage
 
 	// OpenAIのクライアントを作成
 	cli, err := NewClient(r.openaitoken)
@@ -111,12 +112,13 @@ func (r *room) run() {
 				r.tracer.TraceInfo(logContent)
 				sendMessageAllClients(r, msg)
 
+				// ユーザーの発言を受け取る
+				userMessage := NewChatMessage(RoleUser, msg.Name, "")
+				userMessage.Text = msg.Message
+
 				// 「ずり」という単語があったときだけbotに反応させる
-				reg := regexp.MustCompile(`ずり`)
-				if reg.MatchString(msg.Message) {
-					// ユーザーの発言を受け取る
-					userMessage := NewChatMessage(RoleUser, msg.Name, "")
-					userMessage.Text = msg.Message
+				regzuri := regexp.MustCompile(`ずり`)
+				if regzuri.MatchString(msg.Message) {
 					messagesForZuri = append(messagesForZuri, userMessage)
 
 					// 人格呼び出し
@@ -132,6 +134,28 @@ func (r *room) run() {
 
 					// bot のメッセージを送信
 					msg.Name = "ずり"
+					msg.Message = message.Text
+					sendMessageAllClients(r, msg)
+				}
+
+				// 「ユキ」という単語があったときだけbotに反応させる
+				regyuki := regexp.MustCompile(`ユキ`)
+				if regyuki.MatchString(msg.Message) {
+					messagesForYuki = append(messagesForYuki, userMessage)
+
+					// 人格呼び出し
+					personality := GetPersonality("yuki")
+
+					// OpenAIのAPIを叩いて、AIの発言を作成
+					message, err := cli.Completion(ctx, msg.Name, personality, messagesForYuki)
+					if err != nil {
+						fmt.Println("error:", err.Error())
+						continue
+					}
+					fmt.Printf("[%s]\n", message)
+
+					// bot のメッセージを送信
+					msg.Name = "ユキ"
 					msg.Message = message.Text
 					sendMessageAllClients(r, msg)
 				}
