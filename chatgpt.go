@@ -17,7 +17,7 @@ func (c *Client) Completion(ctx context.Context, userName string, personality Pe
 	stream, err := c.cli.CreateChatCompletionStream(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.GPT4oMini,
 			// ChatMessageからopenai.ChatCompletionMessageに変換
 			Messages: Map(inputData, func(message *ChatMessage) openai.ChatCompletionMessage {
 				return openai.ChatCompletionMessage{
